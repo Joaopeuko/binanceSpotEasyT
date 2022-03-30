@@ -26,9 +26,9 @@ jobs:
 
       - name: Set up Env
         env:
-            BINANCE_BASE_URL: ${{secrets.BINANCE_BASE_URL}}
-            BINANCE_API_KEY: ${{secrets.BINANCE_API_KEY}}
-            BINANCE_SECRET_KEY: ${{secrets.BINANCE_SECRET_KEY}}
+          BINANCE_BASE_URL: ${{secrets.BINANCE_BASE_URL}}
+          BINANCE_API_KEY: ${{secrets.BINANCE_API_KEY}}
+          BINANCE_SECRET_KEY: ${{secrets.BINANCE_SECRET_KEY}}
 
       #Install dependencies
       - name: Install dependencies

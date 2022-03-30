@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>binanceSpotEasyT.tick</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">binanceSpotEasyT</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../binanceSpotEasyT.html#binancespoteasyt-documentation">binancespoteasyt documentation:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../initialization.html" class="reference internal ">Initialization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../rates.html" class="reference internal ">Rates</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../tick.html" class="reference internal ">Tick</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../timeframe.html" class="reference internal ">Timeframe</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../trade.html" class="reference internal ">Trade</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>binanceSpotEasyT.tick</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for binanceSpotEasyT.tick</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">abstractEasyT</span> <span class="kn">import</span> <span class="n">tick</span>
+<span class="kn">from</span> <span class="nn">supportLibEasyT</span> <span class="kn">import</span> <span class="n">log_manager</span>
+
+<span class="kn">from</span> <span class="nn">binanceSpotEasyT.util</span> <span class="kn">import</span> <span class="n">setup_environment</span>
+
+
+<div class="viewcode-block" id="Tick"><a class="viewcode-back" href="../../tick.html#binanceSpotEasyT.tick.Tick">[docs]</a><span class="k">class</span> <span class="nc">Tick</span><span class="p">(</span><span class="n">tick</span><span class="o">.</span><span class="n">Tick</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tick class is the responsible to retrieve every tick information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Tick.__init__"><a class="viewcode-back" href="../../tick.html#binanceSpotEasyT.tick.Tick.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         Args:</span>
+<span class="sd">             symbol:</span>
+<span class="sd">                 It is the symbol you want information about. You can have information about time, bid, ask, last, volume.</span>
+<span class="sd">         &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">log_manager</span><span class="o">.</span><span class="n">LogManager</span><span class="p">(</span><span class="s1">&#39;binance-spot&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Logger Initialized in Tick&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">url_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secret</span> <span class="o">=</span> <span class="n">setup_environment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_symbol</span> <span class="o">=</span> <span class="n">symbol</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bid</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ask</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Tick.change_symbol"><a class="viewcode-back" href="../../tick.html#binanceSpotEasyT.tick.Tick.change_symbol">[docs]</a>    <span class="k">def</span> <span class="nf">change_symbol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function changes the symbol.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            new_symbol:</span>
+<span class="sd">                It receives the new symbol</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It updates the self._symbol to the new symbol.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_symbol</span> <span class="o">=</span> <span class="n">new_symbol</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Tick.get_new_tick"><a class="viewcode-back" href="../../tick.html#binanceSpotEasyT.tick.Tick.get_new_tick">[docs]</a>    <span class="k">def</span> <span class="nf">get_new_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Everytime this function is called it update the last tick information, it is important to have update</span>
+<span class="sd">                information know the most recent information.</span>
+
+<span class="sd">                Returns:</span>
+<span class="sd">                     It updates the attributes in the constructor.</span>
+
+<span class="sd">                Examples:</span>
+<span class="sd">                    &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">                    &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">                    &gt;&gt;&gt; from binanceSpotEasyT.tick import Tick</span>
+<span class="sd">                    &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">                    &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">                    &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">                    &gt;&gt;&gt; # It will return the most recent information, but it will return None at the first time.</span>
+<span class="sd">                    &gt;&gt;&gt; # The tick need the information to be updated everytime.</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_tick = Tick(symbol=&#39;BTCUSDT&#39;)</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_tick.ask</span>
+<span class="sd">                    None</span>
+<span class="sd">                    &gt;&gt;&gt; # When you update the tick:</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_tick.get_new_tick()</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_tick.ask</span>
+<span class="sd">                    1.09975</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_tick.bid</span>
+<span class="sd">                    1.09975</span>
+<span class="sd">                    &gt;&gt;&gt; # You must have notice that I used bid and ask, some exchanges do not return the last value</span>
+<span class="sd">                    &gt;&gt;&gt; # You can find only the information for bid and ask. If you try to return last it will print 0.0.</span>
+<span class="sd">                    &gt;&gt;&gt; # But remember, not all the exchanges do that, you must check it. Binance return the last value.</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_tick.last</span>
+<span class="sd">                    47572.46</span>
+
+<span class="sd">                    You can ask for this information: time, bid, ask, last, volume.</span>
+
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Tick updated&#39;</span><span class="p">)</span>
+
+        <span class="n">url_ticker</span> <span class="o">=</span> <span class="s1">&#39;/api/v3/ticker/24hr&#39;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_base</span> <span class="o">+</span> <span class="n">url_ticker</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_symbol</span><span class="p">})</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+        <span class="n">ticker</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">ticker</span><span class="p">[</span><span class="s1">&#39;closeTime&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bid</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ticker</span><span class="p">[</span><span class="s1">&#39;bidPrice&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ask</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ticker</span><span class="p">[</span><span class="s1">&#39;askPrice&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ticker</span><span class="p">[</span><span class="s1">&#39;lastPrice&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ticker</span><span class="p">[</span><span class="s1">&#39;volume&#39;</span><span class="p">])</span></div></div>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, Joao Paulo Euko.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

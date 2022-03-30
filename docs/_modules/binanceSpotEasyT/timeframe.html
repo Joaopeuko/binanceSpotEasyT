@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>binanceSpotEasyT.timeframe</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">binanceSpotEasyT</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../binanceSpotEasyT.html#binancespoteasyt-documentation">binancespoteasyt documentation:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../initialization.html" class="reference internal ">Initialization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../rates.html" class="reference internal ">Rates</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../tick.html" class="reference internal ">Tick</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../timeframe.html" class="reference internal ">Timeframe</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../trade.html" class="reference internal ">Trade</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>binanceSpotEasyT.timeframe</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for binanceSpotEasyT.timeframe</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abstractEasyT</span> <span class="kn">import</span> <span class="n">timeframe</span>
+
+
+<div class="viewcode-block" id="TimeFrame"><a class="viewcode-back" href="../../timeframe.html#binanceSpotEasyT.timeframe.TimeFrame">[docs]</a><span class="k">class</span> <span class="nc">TimeFrame</span><span class="p">(</span><span class="n">timeframe</span><span class="o">.</span><span class="n">TimeFrame</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    There are incompatibilities and different patterns in writing the timeframe between platforms.</span>
+<span class="sd">    This class attend to reduce the chance of errors providing the same timeframe structure between platforms.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        You can find an example of the TimeFrame usage in update_rates() function in Rates documentation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ONE_MINUTE</span> <span class="o">=</span> <span class="s1">&#39;1m&#39;</span>  <span class="c1"># 1 minute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TWO_MINUTES</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 2 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">THREE_MINUTES</span> <span class="o">=</span> <span class="s1">&#39;3m&#39;</span>  <span class="c1"># 3 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FOUR_MINUTES</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 4 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FIVE_MINUTES</span> <span class="o">=</span> <span class="s1">&#39;5m&#39;</span>  <span class="c1"># 5 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SIX_MINUTES</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 6 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TEN_MINUTES</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 10 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TWELVE_MINUTES</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 12 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FIFTEEN_MINUTES</span> <span class="o">=</span> <span class="s1">&#39;15m&#39;</span>  <span class="c1"># 15 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TWENTY_MINUTES</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 20 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">THIRTY_MINUTES</span> <span class="o">=</span> <span class="s1">&#39;30m&#39;</span>  <span class="c1"># 30 minutes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ONE_HOUR</span> <span class="o">=</span> <span class="s1">&#39;1h&#39;</span>  <span class="c1"># 1 hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TWO_HOURS</span> <span class="o">=</span> <span class="s1">&#39;2h&#39;</span>  <span class="c1"># 2 hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">THREE_HOURS</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># 3 hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FOUR_HOURS</span> <span class="o">=</span> <span class="s1">&#39;4h &#39;</span>  <span class="c1"># 4 hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SIX_HOURS</span> <span class="o">=</span> <span class="s1">&#39;6h&#39;</span>  <span class="c1"># 6 hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EIGHT_HOURS</span> <span class="o">=</span> <span class="s1">&#39;8h&#39;</span>  <span class="c1"># 8 hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TWELVE_HOURS</span> <span class="o">=</span> <span class="s1">&#39;12h&#39;</span>  <span class="c1"># 12 hour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ONE_DAY</span> <span class="o">=</span> <span class="s1">&#39;1d&#39;</span>  <span class="c1"># 1 Day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">THREE_DAY</span> <span class="o">=</span> <span class="s1">&#39;3d&#39;</span>  <span class="c1"># 3 Days</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ONE_WEEK</span> <span class="o">=</span> <span class="s1">&#39;1w&#39;</span>  <span class="c1"># 1 Week</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ONE_MONTH</span> <span class="o">=</span> <span class="s1">&#39;1M&#39;</span>  <span class="c1"># 1 Month</span></div>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, Joao Paulo Euko.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

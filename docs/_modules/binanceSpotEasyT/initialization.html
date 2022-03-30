@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>binanceSpotEasyT.initialization</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">binanceSpotEasyT</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../binanceSpotEasyT.html#binancespoteasyt-documentation">binancespoteasyt documentation:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../initialization.html" class="reference internal ">Initialization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../rates.html" class="reference internal ">Rates</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../tick.html" class="reference internal ">Tick</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../timeframe.html" class="reference internal ">Timeframe</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../trade.html" class="reference internal ">Trade</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>binanceSpotEasyT.initialization</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for binanceSpotEasyT.initialization</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">hmac</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlencode</span>
+<span class="kn">from</span> <span class="nn">supportLibEasyT</span> <span class="kn">import</span> <span class="n">log_manager</span>
+<span class="kn">from</span> <span class="nn">abstractEasyT</span> <span class="kn">import</span> <span class="n">initialization</span>
+<span class="kn">from</span> <span class="nn">binanceSpotEasyT.util</span> <span class="kn">import</span> <span class="n">setup_environment</span><span class="p">,</span> <span class="n">get_account</span>
+
+
+<div class="viewcode-block" id="PlatformNotInitialized"><a class="viewcode-back" href="../../initialization.html#binanceSpotEasyT.initialization.PlatformNotInitialized">[docs]</a><span class="k">class</span> <span class="nc">PlatformNotInitialized</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise this error when ping was not able to be retrieved.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="SymbolNotFound"><a class="viewcode-back" href="../../initialization.html#binanceSpotEasyT.initialization.SymbolNotFound">[docs]</a><span class="k">class</span> <span class="nc">SymbolNotFound</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise this error when the symbol is not found.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Initialize"><a class="viewcode-back" href="../../initialization.html#binanceSpotEasyT.initialization.Initialize">[docs]</a><span class="k">class</span> <span class="nc">Initialize</span><span class="p">(</span><span class="n">initialization</span><span class="o">.</span><span class="n">Initialize</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class ensure that the platform are working properly.</span>
+<span class="sd">    If it is connected on the internet, and if the symbol that you are trying to use exists or was not mistyped.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Initialize.__init__"><a class="viewcode-back" href="../../initialization.html#binanceSpotEasyT.initialization.Initialize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the constructor and set the _log.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">log_manager</span><span class="o">.</span><span class="n">LogManager</span><span class="p">(</span><span class="s1">&#39;binance-spot&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Logger Initialized in Initialize&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">symbol_initialized</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">url_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secret</span> <span class="o">=</span> <span class="n">setup_environment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Initialize._initialize_account"><a class="viewcode-back" href="../../initialization.html#binanceSpotEasyT.initialization.Initialize._initialize_account">[docs]</a>    <span class="k">def</span> <span class="nf">_initialize_account</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function check if it is possible to login into Binance using the API KEY and SECRET.</span>
+<span class="sd">        You must have this information.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            raise_for_status():</span>
+<span class="sd">                This error happens when it returns an error.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It returns True if it works fine.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">get_account</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secret</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Initialize.initialize_platform"><a class="viewcode-back" href="../../initialization.html#binanceSpotEasyT.initialization.Initialize.initialize_platform">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_platform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is responsible to initialize the platform that will be used to trade.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            PlatformNotInitialized:</span>
+<span class="sd">                Raise this error when there are some problem with internet connection.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It returns true if initialized else return false.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">            &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">            &gt;&gt;&gt; # The function and the function return:</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">            True</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Initializing Binance Spot.&#39;</span><span class="p">)</span>
+
+        <span class="n">url_ping</span> <span class="o">=</span> <span class="s1">&#39;/api/v3/ping&#39;</span>
+        <span class="n">ping</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_base</span> <span class="o">+</span> <span class="n">url_ping</span><span class="p">)</span>
+        <span class="n">ping</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">ping</span><span class="o">.</span><span class="n">json</span><span class="p">()</span> <span class="o">==</span> <span class="p">{}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Ping connection accepted, checking account.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_account</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Binance Spot successfully initialized.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Initialization failed, check internet connection.&#39;</span><span class="p">)</span>
+
+            <span class="k">raise</span> <span class="n">PlatformNotInitialized</span></div>
+
+<div class="viewcode-block" id="Initialize.initialize_symbol"><a class="viewcode-back" href="../../initialization.html#binanceSpotEasyT.initialization.Initialize.initialize_symbol">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_symbol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">symbols</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is responsible to initialize as many symbols as you want.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            symbols:</span>
+<span class="sd">                It receives strings as parameters containing the symbol names to be initialized.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SymbolNotFound: If not possible to initialize the symbol raises this error.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            When the symbol is successfully initialized it returns True and, it updates the list</span>
+<span class="sd">            self.symbol_initialized if you want to work with the symbols correctly initialized.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">            &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; # The function and the function return:</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; # Check initialize.symbol_initialized to see the list of initialized symbols</span>
+<span class="sd">            &gt;&gt;&gt; initialize.symbol_initialized</span>
+<span class="sd">            [&#39;BTCUSDT&#39;]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Initializing symbols.&#39;</span><span class="p">)</span>
+
+        <span class="n">url_exchange_info</span> <span class="o">=</span> <span class="s1">&#39;/api/v3/exchangeInfo&#39;</span>
+
+        <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">symbols</span><span class="p">:</span>
+            <span class="n">symbol</span> <span class="o">=</span> <span class="n">symbol</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Initializing </span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">}</span>
+
+            <span class="n">exchange_info</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_base</span> <span class="o">+</span> <span class="n">url_exchange_info</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+
+            <span class="c1"># Prepare the symbol to open positions</span>
+            <span class="k">if</span> <span class="n">exchange_info</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;It was not possible to initialize </span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s1">, symbol not found or not visible.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">SymbolNotFound</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">symbol_initialized</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symbol</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s1"> successfully initialized.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, Joao Paulo Euko.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

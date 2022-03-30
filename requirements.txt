@@ -1,0 +1,11 @@
+pytest~=7.0.1
+coverage~=6.3.2
+requests~=2.27.1
+pytest-cov~=3.0.0
+setuptools~=60.9.3
+abstractEasyT~=0.2.2
+python-dotenv~=0.19.2
+supportLibEasyT~=0.1.0
+
+
+

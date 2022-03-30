@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5138627782198565"
+         crossorigin="anonymous">
+      </script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6X7Z31G05"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-G6X7Z31G05');
+      </script>
+
+      <title>Util</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="prev" title="Trade" href="trade.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">binanceSpotEasyT</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="binanceSpotEasyT.html#summary">summary</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="initialization.html" class="reference internal ">Initialization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="rates.html" class="reference internal ">Rates</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="tick.html" class="reference internal ">Tick</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="timeframe.html" class="reference internal ">Timeframe</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="trade.html" class="reference internal ">Trade</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Util</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#module-binanceSpotEasyT.util" class="reference internal">Util</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="binanceSpotEasyT.html">Summary</a> &raquo;</li>
+    
+    <li>Util</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="trade.html"
+       title="previous chapter">← Trade</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="module-binanceSpotEasyT.util">
+<span id="util"></span><h1>Util<a class="headerlink" href="#module-binanceSpotEasyT.util" title="Permalink to this headline">¶</a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="binanceSpotEasyT.util.CredentialsNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">binanceSpotEasyT.util.</span></span><span class="sig-name descname"><span class="pre">CredentialsNotFound</span></span><a class="reference internal" href="_modules/binanceSpotEasyT/util.html#CredentialsNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.util.CredentialsNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise this error when the key or the BINANCE_API_SECRET are not found, it does not prevent if the key or the BINANCE_API_SECRET are wrong.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binanceSpotEasyT.util.get_account">
+<span class="sig-prename descclassname"><span class="pre">binanceSpotEasyT.util.</span></span><span class="sig-name descname"><span class="pre">get_account</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">supportLibEasyT.log_manager.LogManager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url_base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/binanceSpotEasyT/util.html#get_account"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.util.get_account" title="Permalink to this definition">¶</a></dt>
+<dd><p>This functions returns User’s account information.
+:param log: The log receives a log handler to be able to log the information
+:param url_base: url_base is the parameter containing the principal URL to call the endpoint.</p>
+<blockquote>
+<div><p>There are many kind of url_base, usually one for test and the other for real transaction.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – It is the key used to authenticate transaction for Binance</p></li>
+<li><p><strong>secret</strong> – It is the secret used to authenticate transaction for Binance</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The return is a JSON object that contains account information</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binanceSpotEasyT.util.get_price_last">
+<span class="sig-prename descclassname"><span class="pre">binanceSpotEasyT.util.</span></span><span class="sig-name descname"><span class="pre">get_price_last</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url_base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/binanceSpotEasyT/util.html#get_price_last"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.util.get_price_last" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is used to get the last price of a determined symbol, the last price is the most recent one.
+:param url_base: url_base is the parameter containing the principal URL to call the endpoint.</p>
+<blockquote>
+<div><p>There are many kind of url_base, usually one for test and the other for real transaction.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>symbol</strong> – The symbol you want the most recent price.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>It returns the price in a string format</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binanceSpotEasyT.util.get_symbol_asset_balance">
+<span class="sig-prename descclassname"><span class="pre">binanceSpotEasyT.util.</span></span><span class="sig-name descname"><span class="pre">get_symbol_asset_balance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">supportLibEasyT.log_manager.LogManager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url_base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/binanceSpotEasyT/util.html#get_symbol_asset_balance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.util.get_symbol_asset_balance" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>log</strong> – The log receives a log handler to be able to log the information</p></li>
+<li><p><strong>url_base</strong> – url_base is the parameter containing the principal URL to call the endpoint.
+There are many kind of url_base, usually one for test and the other for real transaction.</p></li>
+<li><p><strong>key</strong> – It is the key used to authenticate transaction for Binance</p></li>
+<li><p><strong>secret</strong> – It is the secret used to authenticate transaction for Binance</p></li>
+<li><p><strong>symbol</strong> – The symbol you want to know how much of that currency you have.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A float number with the amount of a specific currency asked for</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binanceSpotEasyT.util.setup_environment">
+<span class="sig-prename descclassname"><span class="pre">binanceSpotEasyT.util.</span></span><span class="sig-name descname"><span class="pre">setup_environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'str'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/binanceSpotEasyT/util.html#setup_environment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.util.setup_environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function are responsible to check if the credentials are available, it is used to prevent future problems.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>log</strong> – Receives the log handler to handle this support function.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#binanceSpotEasyT.util.CredentialsNotFound" title="binanceSpotEasyT.util.CredentialsNotFound"><strong>CredentialsNotFound</strong></a> – This error returns when the key is missing, empty or invalid.</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="trade.html"
+       title="previous chapter">← Trade</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, Joao Paulo Euko.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

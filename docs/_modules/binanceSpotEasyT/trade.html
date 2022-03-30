@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>binanceSpotEasyT.trade</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">binanceSpotEasyT</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../binanceSpotEasyT.html#binancespoteasyt-documentation">binancespoteasyt documentation:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../initialization.html" class="reference internal ">Initialization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../rates.html" class="reference internal ">Rates</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../tick.html" class="reference internal ">Tick</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../timeframe.html" class="reference internal ">Timeframe</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../trade.html" class="reference internal ">Trade</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>binanceSpotEasyT.trade</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for binanceSpotEasyT.trade</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">hmac</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">abstractEasyT</span> <span class="kn">import</span> <span class="n">trade</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlencode</span>
+<span class="kn">from</span> <span class="nn">supportLibEasyT</span> <span class="kn">import</span> <span class="n">log_manager</span>
+<span class="kn">from</span> <span class="nn">binanceSpotEasyT.util</span> <span class="kn">import</span> <span class="n">get_price_last</span>
+<span class="kn">from</span> <span class="nn">binanceSpotEasyT.util</span> <span class="kn">import</span> <span class="n">setup_environment</span>
+<span class="kn">from</span> <span class="nn">binanceSpotEasyT.util</span> <span class="kn">import</span> <span class="n">get_symbol_asset_balance</span>
+
+
+<div class="viewcode-block" id="Trade"><a class="viewcode-back" href="../../trade.html#binanceSpotEasyT.trade.Trade">[docs]</a><span class="k">class</span> <span class="nc">Trade</span><span class="p">(</span><span class="n">trade</span><span class="o">.</span><span class="n">Trade</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is responsible to handle all the trade requests.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Trade.__init__"><a class="viewcode-back" href="../../trade.html#binanceSpotEasyT.trade.Trade.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">lot</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">stop_loss</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">take_profit</span><span class="p">:</span> <span class="nb">float</span>
+                 <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                It is allowed to have only one position at time per symbol, right now it is not possible to open a position and</span>
+<span class="sd">                increase the size of it or to open opposite position. Open an open position will close the other direction one.</span>
+
+<span class="sd">                Args:</span>
+<span class="sd">                    symbol:</span>
+<span class="sd">                        It is the symbol you want to open or close or check if already have an operation opened.</span>
+
+<span class="sd">                    lot:</span>
+<span class="sd">                        It is how many shares you want to trade, many symbols allow fractions and others requires a</span>
+<span class="sd">                        certain amount. It can be 0.01, 100.0, 1000.0, 10000.0.</span>
+
+<span class="sd">                    stop_loss:</span>
+<span class="sd">                        It is how much you accept to lose. Example: If you buy a share for US$10.00, and you accept to lose US$1.00</span>
+<span class="sd">                        you set this variable at 1.00, you will be out of the operation at US$9.00 (sometimes more, somtime less,</span>
+<span class="sd">                        the US$9.00 is the trigger). Keep in mind that some symbols has different points metrics, US$1.00 sometimes</span>
+<span class="sd">                        can be 1000 points.</span>
+
+<span class="sd">                    take_profit:</span>
+<span class="sd">                        It is how much you accept to win. Example: If you buy a share for US$10.00, and you accept to win US$1.00</span>
+<span class="sd">                        you set this variable at 1.00, you will be out of the operation at US$11.00 (sometimes more, somtime less,</span>
+<span class="sd">                        the US$11.00 is the trigger). Keep in mind that some symbols has different points metrics, US$1.00 sometimes</span>
+<span class="sd">                        can be 1000 points.</span>
+
+<span class="sd">                &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">log_manager</span><span class="o">.</span><span class="n">LogManager</span><span class="p">(</span><span class="s1">&#39;binance-spot&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Logger Initialized in Trade&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="n">symbol</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lot</span> <span class="o">=</span> <span class="n">lot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_loss</span> <span class="o">=</span> <span class="n">stop_loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">take_profit</span> <span class="o">=</span> <span class="n">take_profit</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="mi">8</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">url_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secret</span> <span class="o">=</span> <span class="n">setup_environment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_trade_allowed</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">trade_direction</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># &#39;buy&#39;, &#39;sell&#39;, or None for no position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position_check</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Trade.normalize"><a class="viewcode-back" href="../../trade.html#binanceSpotEasyT.trade.Trade.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">price</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function normalize the price to ensure a precision that is required by the platform</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            price:</span>
+<span class="sd">                It is the price that you want to be normalized, usually is the last price to open a market position.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It returns the float price normalized under a precision that is accepted by the platform.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.trade import Trade</span>
+<span class="sd">            &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade = Trade(symbol=&#39;BTCUSDT&#39;, lot=1.0, stop_loss=1.0, take_profit=1.0)</span>
+<span class="sd">            &gt;&gt;&gt; # The normalize function is used inside other functions, but the idea is to normalize the value to</span>
+<span class="sd">            &gt;&gt;&gt; # be accepted in the trade request. If you want to see this function in action you can look at</span>
+<span class="sd">            &gt;&gt;&gt; # open_buy() and open_sell()</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.normalize(12.3456789101112131415)</span>
+<span class="sd">            12.3456789</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Normalizing the price&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">round_</span><span class="p">(</span><span class="n">price</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Trade.open_buy"><a class="viewcode-back" href="../../trade.html#binanceSpotEasyT.trade.Trade.open_buy">[docs]</a>    <span class="k">def</span> <span class="nf">open_buy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This functions when called send a buy request to Binance with the parameters in the attributes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It returns None, but if an error occurs when open a position it will break.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            Try this on your demo account with fake money, a position will be opened.</span>
+
+<span class="sd">            &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.trade import Trade</span>
+<span class="sd">            &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; # Notice that the stop and profit are zero, that is because the Spot do not use it.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade = Trade(symbol=&#39;BTCUSDT&#39;, lot=0.01, stop_loss=0.0, take_profit=0.0)</span>
+<span class="sd">            &gt;&gt;&gt; # When it works it returns None</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.open_buy()</span>
+<span class="sd">            None</span>
+<span class="sd">            &gt;&gt;&gt; # Just for curiosity, if you want to try to open a buy position with this sell opened you will close</span>
+<span class="sd">            &gt;&gt;&gt; # the sell position</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.open_sell()</span>
+<span class="sd">            None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">price_last</span> <span class="o">=</span> <span class="n">get_price_last</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;BUY Order sent: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="si">}</span><span class="s1">,&#39;</span>
+                              <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lot</span><span class="si">}</span><span class="s1"> lot(s),&#39;</span>
+                              <span class="sa">f</span><span class="s1">&#39; at </span><span class="si">{</span><span class="n">price_last</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">url_order</span> <span class="o">=</span> <span class="s2">&quot;/api/v3/order&quot;</span>
+
+        <span class="n">time_stamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span>
+            <span class="s2">&quot;side&quot;</span><span class="p">:</span> <span class="s1">&#39;BUY&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s1">&#39;MARKET&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lot</span><span class="p">,</span>
+            <span class="s2">&quot;recvWindow&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">time_stamp</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">payload_encoded</span> <span class="o">=</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+        <span class="n">signature</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_secret</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">payload_encoded</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+        <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;signature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">signature</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_base</span> <span class="o">+</span> <span class="n">url_order</span><span class="p">,</span>
+                              <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+                              <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;X-MBX-APIKEY&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="p">})</span>
+
+        <span class="n">order</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Change trade direction to BUY.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trade_direction</span> <span class="o">=</span> <span class="s1">&#39;buy&#39;</span></div>
+
+<div class="viewcode-block" id="Trade.open_sell"><a class="viewcode-back" href="../../trade.html#binanceSpotEasyT.trade.Trade.open_sell">[docs]</a>    <span class="k">def</span> <span class="nf">open_sell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This functions when called send a sell request to Binance with the parameters in the attributes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It returns None, but if an error occurs when open a position it will break.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            Try this on your demo account with fake money, a position will be opened.</span>
+
+<span class="sd">            &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.trade import Trade</span>
+<span class="sd">            &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; # Notice that the stop and profit are zero, that is because the Spot do not use it.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade = Trade(symbol=&#39;BTCUSDT&#39;, lot=0.01, stop_loss=0.0, take_profit=0.0)</span>
+<span class="sd">            &gt;&gt;&gt; # When it works it returns None</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.open_sell()</span>
+<span class="sd">            None</span>
+<span class="sd">            &gt;&gt;&gt; # Just for curiosity, if you want to try to open a buy position with this sell opened you will close</span>
+<span class="sd">            &gt;&gt;&gt; # the sell position</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.open_buy()</span>
+<span class="sd">            None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">price_last</span> <span class="o">=</span> <span class="n">get_price_last</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;SELL Order sent: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="si">}</span><span class="s1">,&#39;</span>
+                              <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lot</span><span class="si">}</span><span class="s1"> lot(s),&#39;</span>
+                              <span class="sa">f</span><span class="s1">&#39; at </span><span class="si">{</span><span class="n">price_last</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">url_order</span> <span class="o">=</span> <span class="s2">&quot;/api/v3/order&quot;</span>
+
+        <span class="n">time_stamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="p">,</span>
+            <span class="s2">&quot;side&quot;</span><span class="p">:</span> <span class="s1">&#39;SELL&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s1">&#39;MARKET&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lot</span><span class="p">,</span>
+            <span class="s1">&#39;recvWindow&#39;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">time_stamp</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">payload_encoded</span> <span class="o">=</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+        <span class="n">signature</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_secret</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">payload_encoded</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+        <span class="n">payload</span><span class="p">[</span><span class="s1">&#39;signature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">signature</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_base</span> <span class="o">+</span> <span class="n">url_order</span><span class="p">,</span>
+                              <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+                              <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;X-MBX-APIKEY&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="p">})</span>
+
+        <span class="n">order</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Change trade direction to SELL.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trade_direction</span> <span class="o">=</span> <span class="s1">&#39;sell&#39;</span></div>
+
+<div class="viewcode-block" id="Trade.position_open"><a class="viewcode-back" href="../../trade.html#binanceSpotEasyT.trade.Trade.position_open">[docs]</a>    <span class="k">def</span> <span class="nf">position_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buy</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">sell</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function receives two bool variables, buy and sell, if one of this variable is true and the other is false,</span>
+<span class="sd">        it opens a position to the side that is true, if both variable is true or both variable is false, it does not</span>
+<span class="sd">        open a position.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            buy:</span>
+<span class="sd">                When buy is TRUE it receives a positive signal to open a position. When false, it is ignored.</span>
+
+<span class="sd">            sell:</span>
+<span class="sd">                When sell is TRUE it receives a positive signal to open a position. When false, it is ignored.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It opens the position.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            Try this on your demo account with fake money, a position will be opened.</span>
+
+<span class="sd">            &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.trade import Trade</span>
+<span class="sd">            &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; # Notice that the stop and profit are zero, that is because the Spot do not use it.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade = Trade(symbol=&#39;BTCUSDT&#39;, lot=0.01, stop_loss=0.0, take_profit=0.0)</span>
+<span class="sd">            &gt;&gt;&gt; # _trade_allowed is False by default, this attribute will be handled in another project,</span>
+<span class="sd">            &gt;&gt;&gt; # that is why it exists. Let assign to True and see what happens:</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade._trade_allowed = True</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade._trade_allowed</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; # Currently, I do not have a position for BTC, so first I will try to open a SELL position to see</span>
+<span class="sd">            &gt;&gt;&gt; # what happens since it is not allowed.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_open(False, True)</span>
+<span class="sd">            2022-03-29 10:36:38,580 WARNING - warning - A SELL position are not allowed in Binance Spot, you can only sell a symbol if you have it.</span>
+<span class="sd">            2022-03-29 10:36:38,580 WARNING - warning - A SELL position are not allowed in Binance Spot, you can only sell a symbol if you have it.</span>
+<span class="sd">            # Now that you know what happens lets try to BUY a position.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_open(True, False)</span>
+<span class="sd">            &#39;buy&#39;</span>
+<span class="sd">            &gt;&gt;&gt; # It worked as a expected, let close it. You can check, the position will be closed.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_close()</span>
+<span class="sd">            None</span>
+<span class="sd">            &gt;&gt;&gt; # To finish, let see what happens if both arguments are True</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_open(True, True)</span>
+<span class="sd">            None</span>
+<span class="sd">            &gt;&gt;&gt; # Nothing happens, but when both are False?</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_open(False, False)</span>
+<span class="sd">            None</span>
+<span class="sd">            &gt;&gt;&gt; # Nothing happens</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Open position called. BUY is </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">buy</span><span class="p">)</span><span class="si">}</span><span class="s1">, and SELL is </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">sell</span><span class="p">)</span><span class="si">}</span><span class="s1">. Trade allowed is &#39;</span>
+                              <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_trade_allowed</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trade_allowed</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_direction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">buy</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">sell</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">open_buy</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">position_check</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">sell</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">buy</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;A SELL position are not allowed in Binance Spot, you can only sell a symbol&#39;</span>
+                                  <span class="s1">&#39; if you have it.&#39;</span><span class="p">)</span>
+                <span class="c1"># self.open_sell()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">position_check</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_direction</span></div>
+
+<div class="viewcode-block" id="Trade.position_close"><a class="viewcode-back" href="../../trade.html#binanceSpotEasyT.trade.Trade.position_close">[docs]</a>    <span class="k">def</span> <span class="nf">position_close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This functions checks the trade direction, and it opens an opposite position to the current one to close it.</span>
+<span class="sd">        If there is no position nothing happens.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Close the current position by opening an opposite one.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            Try this on your demo account with fake money, a position will be opened.</span>
+
+<span class="sd">            &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.trade import Trade</span>
+<span class="sd">            &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade = Trade(symbol=&#39;BTCUSDT&#39;, lot=0.01, stop_loss=0.0, take_profit=0.0)</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade._trade_allowed = True</span>
+<span class="sd">            &gt;&gt;&gt; # To know more about btcusdt_trade._trade_allowed look the Examples in position_open() documentation.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_open(True, Sell)</span>
+<span class="sd">            &#39;buy&#39;</span>
+<span class="sd">            &gt;&gt;&gt; # When there is a position opened, btcusdt_trade.position_close() will open a position in a different</span>
+<span class="sd">            &gt;&gt;&gt; # direction to close it.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_close()</span>
+<span class="sd">            None</span>
+<span class="sd">            # It checks the trading direction, return none when there is no trade opened.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.trade_direction</span>
+<span class="sd">            None</span>
+<span class="sd">            # I will open a buy position, check the trade direction and close it!</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_open(True, False)</span>
+<span class="sd">            &#39;buy&#39;</span>
+<span class="sd">            &gt;&gt;&gt;  btcusdt_trade.trade_direction</span>
+<span class="sd">            &#39;buy&#39;</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_close()</span>
+<span class="sd">            &gt;&gt;&gt; # We can see that it worked!</span>
+<span class="sd">            &gt;&gt;&gt; # What happens when I call btcusdt_trade.position_close() with no position opened?</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_close()</span>
+<span class="sd">            None</span>
+<span class="sd">            &gt;&gt;&gt; # Nothing happens, there are no position to be closed.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Close position called.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position_check</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_direction</span> <span class="o">==</span> <span class="s1">&#39;buy&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">open_sell</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position_check</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">trade_direction</span> <span class="o">==</span> <span class="s1">&#39;sell&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">open_buy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position_check</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Trade.position_check"><a class="viewcode-back" href="../../trade.html#binanceSpotEasyT.trade.Trade.position_check">[docs]</a>    <span class="k">def</span> <span class="nf">position_check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function checks if there are a position opened and update the variable self.trade_direction.</span>
+<span class="sd">        If there is no position, the self.trade_direction will be updated to None, else, it updates with the trade</span>
+<span class="sd">        direction, which can be &#39;sell&#39; or &#39;buy&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            This function update the variable self.trade_direction and do not return a result.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            Try this on your demo account with fake money, a position will be opened.</span>
+
+<span class="sd">            &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.trade import Trade</span>
+<span class="sd">            &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade = Trade(symbol=&#39;BTCUSDT&#39;, lot=0.01, stop_loss=0.0, take_profit=0.0)</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade._trade_allowed = True</span>
+<span class="sd">            &gt;&gt;&gt; # Position check it is just to ensure that the btcusdt_trade.trade_direction are in the right direction.</span>
+<span class="sd">            &gt;&gt;&gt; # The btcusdt_trade.trade_direction is automatically handled by buy open_sell() and open_buy() and</span>
+<span class="sd">            &gt;&gt;&gt; # it returns the trade direction or None when there is no trade opened.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.trade_direction</span>
+<span class="sd">            None</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_open(True, False)</span>
+<span class="sd">            &#39;buy&#39;</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.trade_direction</span>
+<span class="sd">            &#39;buy&#39;</span>
+<span class="sd">            &gt;&gt;&gt; # After I open a buy position, it returns &#39;buy&#39; to trade_direction, but, what happens if I manually</span>
+<span class="sd">            &gt;&gt;&gt; # change the direction?</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.trade_direction = &#39;coffee shop&#39;</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.trade_direction</span>
+<span class="sd">            &#39;coffee shop&#39;</span>
+<span class="sd">            &gt;&gt;&gt; # It is possible to see that the trade_direction was changed.</span>
+<span class="sd">            &gt;&gt;&gt; # and the position_check() is called in all the functions that opens and closes position</span>
+<span class="sd">            &gt;&gt;&gt; # to ensure that direction is correct, I will call position_check() to fix my change to &#39;coffee shop&#39;</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_check()</span>
+<span class="sd">            None</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.trade_direction</span>
+<span class="sd">            &#39;buy&#39;</span>
+<span class="sd">            &gt;&gt;&gt; # It worked.</span>
+<span class="sd">            &gt;&gt;&gt; # That is it, I will just the position that I opened before.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_trade.position_close()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Calls Binance-Spot to check if there is a position opened.&#39;</span><span class="p">)</span>
+
+        <span class="n">balance_asset</span> <span class="o">=</span> <span class="n">get_symbol_asset_balance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secret</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">balance_asset</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.00000000</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trade_direction</span> <span class="o">=</span> <span class="s1">&#39;buy&#39;</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trade_direction</span> <span class="o">=</span> <span class="kc">None</span></div></div>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, Joao Paulo Euko.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5138627782198565"
+         crossorigin="anonymous">
+      </script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6X7Z31G05"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-G6X7Z31G05');
+      </script>
+      <title>Rates</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Tick" href="tick.html" />
+  <link rel="prev" title="Initialization" href="initialization.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">binanceSpotEasyT</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="binanceSpotEasyT.html#summary">summary</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="initialization.html" class="reference internal ">Initialization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Rates</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#module-binanceSpotEasyT.rates" class="reference internal">Rates</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="tick.html" class="reference internal ">Tick</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="timeframe.html" class="reference internal ">Timeframe</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="trade.html" class="reference internal ">Trade</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="util.html" class="reference internal ">Util</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="binanceSpotEasyT.html">Summary</a> &raquo;</li>
+    
+    <li>Rates</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="initialization.html"
+       title="previous chapter">← Initialization</a>
+  </li>
+  <li class="next">
+    <a href="tick.html"
+       title="next chapter">Tick →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="module-binanceSpotEasyT.rates">
+<span id="rates"></span><h1>Rates<a class="headerlink" href="#module-binanceSpotEasyT.rates" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="binanceSpotEasyT.rates.Rates">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">binanceSpotEasyT.rates.</span></span><span class="sig-name descname"><span class="pre">Rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeframe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="timeframe.html#binanceSpotEasyT.timeframe.TimeFrame" title="binanceSpotEasyT.timeframe.TimeFrame"><span class="pre">binanceSpotEasyT.timeframe.TimeFrame</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/binanceSpotEasyT/rates.html#Rates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.rates.Rates" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="binanceSpotEasyT.rates.Rates.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeframe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="timeframe.html#binanceSpotEasyT.timeframe.TimeFrame" title="binanceSpotEasyT.timeframe.TimeFrame"><span class="pre">binanceSpotEasyT.timeframe.TimeFrame</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/binanceSpotEasyT/rates.html#Rates.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.rates.Rates.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symbol</strong> – The symbol you want to retrieve previous data.</p></li>
+<li><p><strong>timeframe</strong> – The timeframe you want information, like 1 minute, 5 minute, 1 week. You can find all the timeframe
+available in the TimeFrame Class (binanceSpotEasyT.timeframe).</p></li>
+<li><p><strong>count</strong> – It is the amount of information in the past you want. If your time frame is 5 minutes and your count is 4,
+it will return 4 values containing time, open, high, low, close, tick_volume information of this past 4
+candlesticks.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="binanceSpotEasyT.rates.Rates.change_count">
+<span class="sig-name descname"><span class="pre">change_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/binanceSpotEasyT/rates.html#Rates.change_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.rates.Rates.change_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function changes the count.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_count</strong> – It receives the new new_count</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>It updates the self._count to the new count.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># All the code you need to execute the function:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">binanceSpotEasyT.initialization</span> <span class="kn">import</span> <span class="n">Initialize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">binanceSpotEasyT.timeframe</span> <span class="kn">import</span> <span class="n">TimeFrame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">binanceSpotEasyT.rates</span> <span class="kn">import</span> <span class="n">Rates</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">initialize</span> <span class="o">=</span> <span class="n">Initialize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">initialize</span><span class="o">.</span><span class="n">initialize_platform</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">initialize</span><span class="o">.</span><span class="n">initialize_symbol</span><span class="p">(</span><span class="s1">&#39;BTCUSDT&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeframe</span> <span class="o">=</span> <span class="n">TimeFrame</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># it will get the last 20 one minute candlestick information.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">btcusdt_rates</span> <span class="o">=</span> <span class="n">Rates</span><span class="p">(</span><span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;BTCUSDT&#39;</span><span class="p">,</span> <span class="n">timeframe</span><span class="o">=</span><span class="n">timeframe</span><span class="o">.</span><span class="n">ONE_MINUTE</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">btcusdt_rates</span><span class="o">.</span><span class="n">update_rates</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">btcusdt_rates</span><span class="o">.</span><span class="n">close</span><span class="p">)</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># When you change the count, you need to update the information, and you can see that it worked.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">btcusdt_rates</span><span class="o">.</span><span class="n">change_count</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">btcusdt_rates</span><span class="o">.</span><span class="n">update_rates</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">btcusdt_rates</span><span class="o">.</span><span class="n">close</span><span class="p">)</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>You can ask for this information: time, open, high, low, close, tick_volume.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="binanceSpotEasyT.rates.Rates.change_symbol">
+<span class="sig-name descname"><span class="pre">change_symbol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/binanceSpotEasyT/rates.html#Rates.change_symbol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.rates.Rates.change_symbol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function changes the symbol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_symbol</strong> – It receives the new symbol</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>It updates the self._symbol to the new symbol.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="binanceSpotEasyT.rates.Rates.change_timeframe">
+<span class="sig-name descname"><span class="pre">change_timeframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_timeframe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="timeframe.html#binanceSpotEasyT.timeframe.TimeFrame" title="binanceSpotEasyT.timeframe.TimeFrame"><span class="pre">binanceSpotEasyT.timeframe.TimeFrame</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/binanceSpotEasyT/rates.html#Rates.change_timeframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.rates.Rates.change_timeframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function changes the timeframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>new_timeframe</strong> – It receives the new timeframe</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>It updates the self._timeframe to the new timeframe.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="binanceSpotEasyT.rates.Rates.update_rates">
+<span class="sig-name descname"><span class="pre">update_rates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/binanceSpotEasyT/rates.html#Rates.update_rates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#binanceSpotEasyT.rates.Rates.update_rates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Everytime this function is called it update the last values, it is important to have an updated
+information to calculate indicators and ensure your trading strategy is working properly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>It updates the attributes in the constructor.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># All the code you need to execute the function:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">binanceSpotEasyT.initialization</span> <span class="kn">import</span> <span class="n">Initialize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">binanceSpotEasyT.timeframe</span> <span class="kn">import</span> <span class="n">TimeFrame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">binanceSpotEasyT.rates</span> <span class="kn">import</span> <span class="n">Rates</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">initialize</span> <span class="o">=</span> <span class="n">Initialize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">initialize</span><span class="o">.</span><span class="n">initialize_platform</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeframe</span> <span class="o">=</span> <span class="n">TimeFrame</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">initialize</span><span class="o">.</span><span class="n">initialize_symbol</span><span class="p">(</span><span class="s1">&#39;BTCUSDT&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># it will get the last 20 one minute candlestick information, but it will return none at the first time.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the rates need the information to be updated everytime.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">btcusdt_rates</span> <span class="o">=</span> <span class="n">Rates</span><span class="p">(</span><span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;BTCUSDT&#39;</span><span class="p">,</span> <span class="n">timeframe</span><span class="o">=</span><span class="n">timeframe</span><span class="o">.</span><span class="n">ONE_MINUTE</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The first time, if you try to get a rates information of the close price you will receive None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">btcusdt_rates</span><span class="o">.</span><span class="n">close</span>
+<span class="go">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># But when you update the rates, the prices will be updated.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">btcusdt_rates</span><span class="o">.</span><span class="n">update_rates</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># And the rates will be returned for the information you want.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">btcusdt_rates</span><span class="o">.</span><span class="n">close</span>
+<span class="go">array([47526.5 , 47501.77, 47507.21, 47481.75, 47476.75, 47494.48,</span>
+<span class="go">       47497.64, 47486.77, 47484.85, 47499.99, 47498.11, 47487.96,</span>
+<span class="go">       47473.43, 47459.  , 47466.4 , 47459.01, 47481.22, 47489.09,</span>
+<span class="go">       47510.48, 47520.  ])</span>
+</pre></div>
+</div>
+<p>You can ask for this information: time, open, high, low, close, tick_volume.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="initialization.html"
+       title="previous chapter">← Initialization</a>
+  </li>
+  <li class="next">
+    <a href="tick.html"
+       title="next chapter">Tick →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, Joao Paulo Euko.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

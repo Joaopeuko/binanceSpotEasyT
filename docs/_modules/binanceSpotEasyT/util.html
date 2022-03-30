@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>binanceSpotEasyT.util</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">binanceSpotEasyT</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../binanceSpotEasyT.html#summary">summary</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../initialization.html" class="reference internal ">Initialization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../rates.html" class="reference internal ">Rates</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../tick.html" class="reference internal ">Tick</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../timeframe.html" class="reference internal ">Timeframe</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../trade.html" class="reference internal ">Trade</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../util.html" class="reference internal ">Util</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>binanceSpotEasyT.util</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for binanceSpotEasyT.util</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">hmac</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlencode</span>
+<span class="kn">from</span> <span class="nn">supportLibEasyT.log_manager</span> <span class="kn">import</span> <span class="n">LogManager</span>
+
+
+<div class="viewcode-block" id="CredentialsNotFound"><a class="viewcode-back" href="../../util.html#binanceSpotEasyT.util.CredentialsNotFound">[docs]</a><span class="k">class</span> <span class="nc">CredentialsNotFound</span><span class="p">(</span><span class="ne">BaseException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raise this error when the key or the BINANCE_API_SECRET are not found, it does not prevent if the key or the BINANCE_API_SECRET are wrong.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="setup_environment"><a class="viewcode-back" href="../../util.html#binanceSpotEasyT.util.setup_environment">[docs]</a><span class="k">def</span> <span class="nf">setup_environment</span><span class="p">(</span><span class="n">log</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function are responsible to check if the credentials are available, it is used to prevent future problems.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        log:</span>
+<span class="sd">            Receives the log handler to handle this support function.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        CredentialsNotFound:</span>
+<span class="sd">            This error returns when the key is missing, empty or invalid.</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Setting up the environment.&#39;</span><span class="p">)</span>
+
+    <span class="n">load_dotenv</span><span class="p">()</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Retrieving the base URL&#39;</span><span class="p">)</span>
+    <span class="n">url_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;BINANCE_BASE_URL&#39;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;URL retrieved: </span><span class="si">{</span><span class="n">url_base</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;BINANCE_API_KEY&#39;</span><span class="p">)</span>
+    <span class="n">secret</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;BINANCE_SECRET_KEY&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">secret</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Your Binance Key or Secret are empty. You must have these information.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">CredentialsNotFound</span>
+
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;&lt;insert your credential here&gt;&#39;</span> <span class="ow">or</span> <span class="n">secret</span> <span class="o">==</span> <span class="s1">&#39;&lt;insert your credential here&gt;&#39;</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Your Binance Key or Secret was not provided. You must have these information.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">CredentialsNotFound</span>
+
+    <span class="k">return</span> <span class="n">url_base</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">secret</span></div>
+
+
+<div class="viewcode-block" id="get_price_last"><a class="viewcode-back" href="../../util.html#binanceSpotEasyT.util.get_price_last">[docs]</a><span class="k">def</span> <span class="nf">get_price_last</span><span class="p">(</span><span class="n">url_base</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function is used to get the last price of a determined symbol, the last price is the most recent one.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        url_base:</span>
+<span class="sd">            url_base is the parameter containing the principal URL to call the endpoint.</span>
+<span class="sd">            There are many kind of url_base, usually one for test and the other for real transaction.</span>
+<span class="sd">        symbol:</span>
+<span class="sd">            The symbol you want the most recent price.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        It returns the price in a string format</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url_price_last</span> <span class="o">=</span> <span class="s2">&quot;/api/v3/ticker/price&quot;</span>
+    <span class="n">price_last</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url_base</span> <span class="o">+</span> <span class="n">url_price_last</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;symbol&quot;</span><span class="p">:</span> <span class="n">symbol</span><span class="p">})</span>
+    <span class="n">price_last</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">price_last</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="get_account"><a class="viewcode-back" href="../../util.html#binanceSpotEasyT.util.get_account">[docs]</a><span class="k">def</span> <span class="nf">get_account</span><span class="p">(</span><span class="n">log</span><span class="p">:</span> <span class="n">LogManager</span><span class="p">,</span>
+                <span class="n">url_base</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">secret</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This functions returns User&#39;s account information.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        log:</span>
+<span class="sd">            The log receives a log handler to be able to log the information</span>
+
+<span class="sd">        url_base:</span>
+<span class="sd">            url_base is the parameter containing the principal URL to call the endpoint.</span>
+<span class="sd">            There are many kind of url_base, usually one for test and the other for real transaction.</span>
+
+<span class="sd">        key:</span>
+<span class="sd">            It is the key used to authenticate transaction for Binance</span>
+
+<span class="sd">        secret:</span>
+<span class="sd">            It is the secret used to authenticate transaction for Binance</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The return is a JSON object that contains account information</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Get account information from Binance Spot&#39;</span><span class="p">)</span>
+
+    <span class="n">time_stamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">urlencode</span><span class="p">({</span>
+        <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">time_stamp</span><span class="p">,</span>
+    <span class="p">})</span>
+
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">secret</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">payload</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+    <span class="n">account</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url_base</span> <span class="o">+</span> <span class="s2">&quot;/api/v3/account&quot;</span><span class="p">,</span>
+                           <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">time_stamp</span><span class="p">,</span>
+                                   <span class="s2">&quot;signature&quot;</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span> <span class="p">},</span>
+                           <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;X-MBX-APIKEY&quot;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span> <span class="p">})</span>
+
+    <span class="n">account</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">account</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="get_symbol_asset_balance"><a class="viewcode-back" href="../../util.html#binanceSpotEasyT.util.get_symbol_asset_balance">[docs]</a><span class="k">def</span> <span class="nf">get_symbol_asset_balance</span><span class="p">(</span><span class="n">log</span><span class="p">:</span> <span class="n">LogManager</span><span class="p">,</span>
+                             <span class="n">url_base</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                             <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                             <span class="n">secret</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                             <span class="n">symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        log:</span>
+<span class="sd">            The log receives a log handler to be able to log the information</span>
+
+<span class="sd">        url_base:</span>
+<span class="sd">            url_base is the parameter containing the principal URL to call the endpoint.</span>
+<span class="sd">            There are many kind of url_base, usually one for test and the other for real transaction.</span>
+
+<span class="sd">        key:</span>
+<span class="sd">            It is the key used to authenticate transaction for Binance</span>
+
+<span class="sd">        secret:</span>
+<span class="sd">            It is the secret used to authenticate transaction for Binance</span>
+
+<span class="sd">        symbol:</span>
+<span class="sd">            The symbol you want to know how much of that currency you have.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A float number with the amount of a specific currency asked for</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Get the asset balance for </span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s1"> Binance Spot&#39;</span><span class="p">)</span>
+    <span class="n">account</span> <span class="o">=</span> <span class="n">get_account</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">url_base</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">secret</span><span class="p">)</span>
+    <span class="n">balances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">account</span><span class="p">[</span><span class="s1">&#39;balances&#39;</span><span class="p">])</span>
+    <span class="n">mask_balance</span> <span class="o">=</span> <span class="n">balances</span><span class="p">[</span><span class="s1">&#39;asset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">symbol</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">balances</span><span class="p">[</span><span class="n">mask_balance</span><span class="p">][</span><span class="s1">&#39;free&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, Joao Paulo Euko.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

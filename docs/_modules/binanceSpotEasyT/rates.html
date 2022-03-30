@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>binanceSpotEasyT.rates</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">binanceSpotEasyT</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../binanceSpotEasyT.html#binancespoteasyt-documentation">binancespoteasyt documentation:</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../initialization.html" class="reference internal ">Initialization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../rates.html" class="reference internal ">Rates</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../tick.html" class="reference internal ">Tick</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../timeframe.html" class="reference internal ">Timeframe</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../trade.html" class="reference internal ">Trade</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>binanceSpotEasyT.rates</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for binanceSpotEasyT.rates</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">abstractEasyT</span> <span class="kn">import</span> <span class="n">rates</span>
+<span class="kn">from</span> <span class="nn">supportLibEasyT</span> <span class="kn">import</span> <span class="n">log_manager</span>
+
+<span class="kn">from</span> <span class="nn">binanceSpotEasyT.timeframe</span> <span class="kn">import</span> <span class="n">TimeFrame</span>
+<span class="kn">from</span> <span class="nn">binanceSpotEasyT.util</span> <span class="kn">import</span> <span class="n">setup_environment</span>
+
+
+<div class="viewcode-block" id="Rates"><a class="viewcode-back" href="../../rates.html#binanceSpotEasyT.rates.Rates">[docs]</a><span class="k">class</span> <span class="nc">Rates</span><span class="p">(</span><span class="n">rates</span><span class="o">.</span><span class="n">Rates</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Rates.__init__"><a class="viewcode-back" href="../../rates.html#binanceSpotEasyT.rates.Rates.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">timeframe</span><span class="p">:</span> <span class="n">TimeFrame</span><span class="p">,</span>
+                 <span class="n">count</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            symbol:</span>
+<span class="sd">                The symbol you want to retrieve previous data.</span>
+
+<span class="sd">            timeframe:</span>
+<span class="sd">                The timeframe you want information, like 1 minute, 5 minute, 1 week. You can find all the timeframe</span>
+<span class="sd">                available in the TimeFrame Class (binanceSpotEasyT.timeframe).</span>
+
+<span class="sd">            count:</span>
+<span class="sd">                It is the amount of information in the past you want. If your time frame is 5 minutes and your count is 4,</span>
+<span class="sd">                it will return 4 values containing time, open, high, low, close, tick_volume information of this past 4</span>
+<span class="sd">                candlesticks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">log_manager</span><span class="o">.</span><span class="n">LogManager</span><span class="p">(</span><span class="s1">&#39;binance-spot&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Logger Initialized in Initialize&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">url_base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_secret</span> <span class="o">=</span> <span class="n">setup_environment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeframe</span> <span class="o">=</span> <span class="n">timeframe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_symbol</span> <span class="o">=</span> <span class="n">symbol</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="n">count</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">open</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_volume</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Rates.change_symbol"><a class="viewcode-back" href="../../rates.html#binanceSpotEasyT.rates.Rates.change_symbol">[docs]</a>    <span class="k">def</span> <span class="nf">change_symbol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function changes the symbol.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            new_symbol:</span>
+<span class="sd">                It receives the new symbol</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It updates the self._symbol to the new symbol.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_symbol</span> <span class="o">=</span> <span class="n">new_symbol</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Rates.change_timeframe"><a class="viewcode-back" href="../../rates.html#binanceSpotEasyT.rates.Rates.change_timeframe">[docs]</a>    <span class="k">def</span> <span class="nf">change_timeframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_timeframe</span><span class="p">:</span> <span class="n">TimeFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function changes the timeframe.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            new_timeframe:</span>
+<span class="sd">                It receives the new timeframe</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It updates the self._timeframe to the new timeframe.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeframe</span> <span class="o">=</span> <span class="n">new_timeframe</span></div>
+
+<div class="viewcode-block" id="Rates.change_count"><a class="viewcode-back" href="../../rates.html#binanceSpotEasyT.rates.Rates.change_count">[docs]</a>    <span class="k">def</span> <span class="nf">change_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function changes the count.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            new_count:</span>
+<span class="sd">                It receives the new new_count</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            It updates the self._count to the new count.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.timeframe import TimeFrame</span>
+<span class="sd">            &gt;&gt;&gt; from binanceSpotEasyT.rates import Rates</span>
+<span class="sd">            &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">            &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; timeframe = TimeFrame()</span>
+<span class="sd">            &gt;&gt;&gt; # it will get the last 20 one minute candlestick information.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_rates = Rates(symbol=&#39;BTCUSDT&#39;, timeframe=timeframe.ONE_MINUTE, count=20)</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_rates.update_rates()</span>
+<span class="sd">            &gt;&gt;&gt; len(btcusdt_rates.close)</span>
+<span class="sd">            20</span>
+<span class="sd">            &gt;&gt;&gt; # When you change the count, you need to update the information, and you can see that it worked.</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_rates.change_count(5)</span>
+<span class="sd">            &gt;&gt;&gt; btcusdt_rates.update_rates()</span>
+<span class="sd">            &gt;&gt;&gt; len(btcusdt_rates.close)</span>
+<span class="sd">            5</span>
+
+<span class="sd">            You can ask for this information: time, open, high, low, close, tick_volume.</span>
+
+<span class="sd">       &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="n">new_count</span></div>
+
+<div class="viewcode-block" id="Rates.update_rates"><a class="viewcode-back" href="../../rates.html#binanceSpotEasyT.rates.Rates.update_rates">[docs]</a>    <span class="k">def</span> <span class="nf">update_rates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Everytime this function is called it update the last values, it is important to have an updated</span>
+<span class="sd">                information to calculate indicators and ensure your trading strategy is working properly.</span>
+
+<span class="sd">                Returns:</span>
+<span class="sd">                    It updates the attributes in the constructor.</span>
+
+<span class="sd">                Examples:</span>
+<span class="sd">                    &gt;&gt;&gt; # All the code you need to execute the function:</span>
+<span class="sd">                    &gt;&gt;&gt; from binanceSpotEasyT.initialization import Initialize</span>
+<span class="sd">                    &gt;&gt;&gt; from binanceSpotEasyT.timeframe import TimeFrame</span>
+<span class="sd">                    &gt;&gt;&gt; from binanceSpotEasyT.rates import Rates</span>
+<span class="sd">                    &gt;&gt;&gt; initialize = Initialize()</span>
+<span class="sd">                    &gt;&gt;&gt; initialize.initialize_platform()</span>
+<span class="sd">                    &gt;&gt;&gt; timeframe = TimeFrame()</span>
+<span class="sd">                    &gt;&gt;&gt; initialize.initialize_symbol(&#39;BTCUSDT&#39;)</span>
+<span class="sd">                    &gt;&gt;&gt; # it will get the last 20 one minute candlestick information, but it will return none at the first time.</span>
+<span class="sd">                    &gt;&gt;&gt; # the rates need the information to be updated everytime.</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_rates = Rates(symbol=&#39;BTCUSDT&#39;, timeframe=timeframe.ONE_MINUTE, count=20)</span>
+<span class="sd">                    &gt;&gt;&gt; # The first time, if you try to get a rates information of the close price you will receive None</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_rates.close</span>
+<span class="sd">                    None</span>
+<span class="sd">                    &gt;&gt;&gt; # But when you update the rates, the prices will be updated.</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_rates.update_rates()</span>
+<span class="sd">                    &gt;&gt;&gt; # And the rates will be returned for the information you want.</span>
+<span class="sd">                    &gt;&gt;&gt; btcusdt_rates.close</span>
+<span class="sd">                    array([47526.5 , 47501.77, 47507.21, 47481.75, 47476.75, 47494.48,</span>
+<span class="sd">                           47497.64, 47486.77, 47484.85, 47499.99, 47498.11, 47487.96,</span>
+<span class="sd">                           47473.43, 47459.  , 47466.4 , 47459.01, 47481.22, 47489.09,</span>
+<span class="sd">                           47510.48, 47520.  ])</span>
+
+<span class="sd">                    You can ask for this information: time, open, high, low, close, tick_volume.</span>
+
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Rates updated&#39;</span><span class="p">)</span>
+
+        <span class="n">url_rates</span> <span class="o">=</span> <span class="s1">&#39;/api/v3/klines&#39;</span>
+
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_symbol</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                   <span class="s1">&#39;interval&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeframe</span><span class="p">,</span>
+                   <span class="s1">&#39;limit&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count</span><span class="p">}</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url_base</span> <span class="o">+</span> <span class="n">url_rates</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Open time&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Open&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;High&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Low&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Close&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Volume&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Close time&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Quote asset volume&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Number of trades&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Taker buy base asset volume&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Taker buy quote asset volume&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;Ignore&#39;</span><span class="p">]</span>
+
+        <span class="n">result</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Open time&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">open</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Open&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;High&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Low&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Close&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_volume</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Number of trades&#39;</span><span class="p">]</span></div></div>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, Joao Paulo Euko.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

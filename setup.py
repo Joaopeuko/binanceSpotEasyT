@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as requirements_file:
 
 setuptools.setup(
     name='binanceSpotEasyT',
-    version='0.0.1',
+    version='0.0.2',
     license='MIT',
     author="Joao Paulo Euko",
     url='https://github.com/Joaopeuko/binanceSpotEasyT',

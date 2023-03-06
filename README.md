@@ -13,7 +13,7 @@
 
 Now that I have your attention I would like you to reflect about the fact that **$1.00 Dollar** might be **not** 
 that **much** to you, but **you, an incredible person**, combined to other's **amazing Sponsors**, can **finance** this 
-project, and it will **allows me** to constantly **improve and maintain** it, **and, I am not asking that much**.
+project, and it will **allow me** to constantly **improve and maintain** it, **and, I am not asking that much**.
 
 Here is my [Patreon](https://www.patreon.com/joaopeuko) link.
 
@@ -54,10 +54,10 @@ All the information will be there.
 All the Libraries Documentation and useful links are linked below:
 
 - easyT
-  - binanceSpotEasyT - [Documentation](https://joaopeuko.github.io/binanceSpotEasyT/) - [GitHub](https://github.com/Joaopeuko/binanceSpotEasyT) - [Pypi](https://pypi.org/project/binanceSpotEasyT/) 
-  - metatrader5EasyT - [Documentation](https://joaopeuko.github.io/metatrader5EasyT/) - [GitHub](https://github.com/Joaopeuko/metatrader5EasyT) - [Pypi](https://pypi.org/project/metatrader5EasyT/)
+  - binanceSpotEasyT - [Documentation](https://joaopeuko.github.io/binanceSpotEasyT/) - [GitHub](https://www.mydocumentations.com/binance-spot/index.html) - [Pypi](https://pypi.org/project/binanceSpotEasyT/) 
+  - metatrader5EasyT - [Documentation](https://joaopeuko.github.io/metatrader5EasyT/) - [GitHub](https://www.mydocumentations.com/mt5/index.html) - [Pypi](https://pypi.org/project/metatrader5EasyT/)
 - Mql5-Python-Integration - [GitHub](https://joaopeuko.github.io/Mql5-Python-Integration/)
 
-The documentation for this specific project is this one [binanceSpotEasyT](https://joaopeuko.github.io/binanceSpotEasyT/).
+The documentation for this specific project is this one [binanceSpotEasyT](https://www.mydocumentations.com/binance-spot/index.html).
 
-See my page ([Joao Paulo Euko](https://joaopeuko.github.io/)) to see all my projects or for more information.
+See my page ([Joao Paulo Euko](https://joaopeuko.com/)) to see all my projects or for more information.

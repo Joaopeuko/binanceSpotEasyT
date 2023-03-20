@@ -114,7 +114,8 @@ class TestTrade:
         trade.position_close()
         assert trade.trade_direction is None
 
-    def test_trade_allowed_direction_none(self):
+    @patch.object(requests, 'get')
+    def test_trade_allowed_direction_none(self, mock_request):
 
         symbol = 'BTCUSDT'
         lot = 0.01

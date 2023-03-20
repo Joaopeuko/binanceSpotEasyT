@@ -13,7 +13,7 @@ class Rates(rates.Rates):
     def __init__(self,
                  symbol: str,
                  timeframe: TimeFrame,
-                 count):
+                 count: int):
         """
         Args:
             symbol:

@@ -1,11 +1,14 @@
-import time
-import hmac
 import hashlib
-import requests
+import hmac
+import time
 from urllib.parse import urlencode
-from supportLibEasyT import log_manager
+
+import requests
 from abstractEasyT import initialization
-from binanceSpotEasyT.util import setup_environment, get_account
+from supportLibEasyT import log_manager
+
+from binanceSpotEasyT.util import get_account
+from binanceSpotEasyT.util import setup_environment
 
 
 class PlatformNotInitialized(BaseException):
@@ -27,8 +30,8 @@ class Initialize(initialization.Initialize):
         Initialize the constructor and set the _log.
         """
 
-        self._log = log_manager.LogManager('binance-spot')
-        self._log.logger.info('Logger Initialized in Initialize')
+        self._log = log_manager.LogManager("binance-spot")
+        self._log.logger.info("Logger Initialized in Initialize")
 
         self.symbol_initialized = []
 
@@ -72,20 +75,20 @@ class Initialize(initialization.Initialize):
             True
 
         """
-        self._log.logger.info('Initializing Binance Spot.')
+        self._log.logger.info("Initializing Binance Spot.")
 
-        url_ping = '/api/v3/ping'
+        url_ping = "/api/v3/ping"
         ping = requests.get(self.url_base + url_ping)
         ping.raise_for_status()
 
         if ping.json() == {}:
-            self._log.logger.info('Ping connection accepted, checking account.')
+            self._log.logger.info("Ping connection accepted, checking account.")
             self._initialize_account()
-            self._log.logger.info('Binance Spot successfully initialized.')
+            self._log.logger.info("Binance Spot successfully initialized.")
             return True
 
         else:
-            self._log.logger.error('Initialization failed, check internet connection.')
+            self._log.logger.error("Initialization failed, check internet connection.")
 
             raise PlatformNotInitialized
 
@@ -118,24 +121,24 @@ class Initialize(initialization.Initialize):
             ['BTCUSDT']
 
         """
-        self._log.logger.info('Initializing symbols.')
+        self._log.logger.info("Initializing symbols.")
 
-        url_exchange_info = '/api/v3/exchangeInfo'
+        url_exchange_info = "/api/v3/exchangeInfo"
 
         for symbol in symbols:
             symbol = symbol.upper()
-            self._log.logger.info(f'Initializing {symbol}.')
-            payload = {'symbol': symbol}
+            self._log.logger.info(f"Initializing {symbol}.")
+            payload = {"symbol": symbol}
 
             exchange_info = requests.get(self.url_base + url_exchange_info, params=payload)
 
             # Prepare the symbol to open positions
             if exchange_info.status_code != 200:
-                self._log.logger.error(f'It was not possible to initialize {symbol}, symbol not found or not visible.')
+                self._log.logger.error(f"It was not possible to initialize {symbol}, symbol not found or not visible.")
                 raise SymbolNotFound
 
             else:
                 self.symbol_initialized.append(symbol)
-                self._log.logger.info(f'{symbol} successfully initialized.')
+                self._log.logger.info(f"{symbol} successfully initialized.")
 
         return True

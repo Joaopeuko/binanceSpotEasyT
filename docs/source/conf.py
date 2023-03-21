@@ -3,28 +3,26 @@
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
-
 # -- Path setup --------------------------------------------------------------
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath("../.."))
 
-autodoc_default_flags = ['members']
+autodoc_default_flags = ["members"]
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'binanceSpotEasyT'
-copyright = '2022, Joao Paulo Euko'
-author = 'Joao Paulo Euko'
+project = "binanceSpotEasyT"
+copyright = "2022, Joao Paulo Euko"
+author = "Joao Paulo Euko"
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = "0.0.1"
 
 
 # -- General configuration ---------------------------------------------------
@@ -33,21 +31,21 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-   'sphinx.ext.autodoc',
-   'sphinx.ext.doctest',
-   'sphinx.ext.intersphinx',
-   'sphinx.ext.todo',
-   'sphinx.ext.coverage',
-   'sphinx.ext.mathjax',
-   'sphinx.ext.ifconfig',
-   'sphinx.ext.viewcode',
-   'sphinx.ext.githubpages',
-   'sphinx.ext.napoleon',
-   'sphinx.ext.autosummary',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.todo",
+    "sphinx.ext.coverage",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.autosummary",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -60,7 +58,7 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'press'
+html_theme = "press"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

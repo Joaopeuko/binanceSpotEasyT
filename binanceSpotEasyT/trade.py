@@ -1,16 +1,17 @@
+import hashlib
 import hmac
 import math
 import time
-import hashlib
+from urllib.parse import urlencode
 
 import numpy as np
 import requests
 from abstractEasyT import trade
-from urllib.parse import urlencode
 from supportLibEasyT import log_manager
+
 from binanceSpotEasyT.util import get_price_last
-from binanceSpotEasyT.util import setup_environment
 from binanceSpotEasyT.util import get_symbol_asset_balance
+from binanceSpotEasyT.util import setup_environment
 
 
 class Trade(trade.Trade):
@@ -18,40 +19,35 @@ class Trade(trade.Trade):
     This class is responsible to handle all the trade requests.
     """
 
-    def __init__(self,
-                 symbol: str,
-                 lot: float,
-                 stop_loss: float,
-                 take_profit: float
-                 ):
+    def __init__(self, symbol: str, lot: float, stop_loss: float, take_profit: float):
         """
-                It is allowed to have only one position at time per symbol, right now it is not possible to open a position and
-                increase the size of it or to open opposite position. Open an open position will close the other direction one.
+        It is allowed to have only one position at time per symbol, right now it is not possible to open a position and
+        increase the size of it or to open opposite position. Open an open position will close the other direction one.
 
-                Args:
-                    symbol:
-                        It is the symbol you want to open or close or check if already have an operation opened.
+        Args:
+            symbol:
+                It is the symbol you want to open or close or check if already have an operation opened.
 
-                    lot:
-                        It is how many shares you want to trade, many symbols allow fractions and others requires a
-                        certain amount. It can be 0.01, 100.0, 1000.0, 10000.0.
+            lot:
+                It is how many shares you want to trade, many symbols allow fractions and others requires a
+                certain amount. It can be 0.01, 100.0, 1000.0, 10000.0.
 
-                    stop_loss:
-                        It is how much you accept to lose. Example: If you buy a share for US$10.00, and you accept to lose US$1.00
-                        you set this variable at 1.00, you will be out of the operation at US$9.00 (sometimes more, somtime less,
-                        the US$9.00 is the trigger). Keep in mind that some symbols has different points metrics, US$1.00 sometimes
-                        can be 1000 points.
+            stop_loss:
+                It is how much you accept to lose. Example: If you buy a share for US$10.00, and you accept to lose US$1.00
+                you set this variable at 1.00, you will be out of the operation at US$9.00 (sometimes more, somtime less,
+                the US$9.00 is the trigger). Keep in mind that some symbols has different points metrics, US$1.00 sometimes
+                can be 1000 points.
 
-                    take_profit:
-                        It is how much you accept to win. Example: If you buy a share for US$10.00, and you accept to win US$1.00
-                        you set this variable at 1.00, you will be out of the operation at US$11.00 (sometimes more, somtime less,
-                        the US$11.00 is the trigger). Keep in mind that some symbols has different points metrics, US$1.00 sometimes
-                        can be 1000 points.
+            take_profit:
+                It is how much you accept to win. Example: If you buy a share for US$10.00, and you accept to win US$1.00
+                you set this variable at 1.00, you will be out of the operation at US$11.00 (sometimes more, somtime less,
+                the US$11.00 is the trigger). Keep in mind that some symbols has different points metrics, US$1.00 sometimes
+                can be 1000 points.
 
-                """
+        """
 
-        self._log = log_manager.LogManager('binance-spot')
-        self._log.logger.info('Logger Initialized in Trade')
+        self._log = log_manager.LogManager("binance-spot")
+        self._log.logger.info("Logger Initialized in Trade")
 
         self.symbol = symbol.upper()
         self.lot = lot
@@ -94,7 +90,7 @@ class Trade(trade.Trade):
             12.3456789
 
         """
-        self._log.logger.info('Normalizing the price')
+        self._log.logger.info("Normalizing the price")
         return np.round_(price, self.points)
 
     def open_buy(self):
@@ -129,34 +125,40 @@ class Trade(trade.Trade):
 
         price_last = get_price_last(self.url_base, self.symbol)
 
-        self._log.logger.info(f'BUY Order sent: {self.symbol},'
-                              f' {self.lot} lot(s),'
-                              f' at {price_last}')
+        self._log.logger.info(f"BUY Order sent: {self.symbol}," f" {self.lot} lot(s)," f" at {price_last}")
 
         url_order = "/api/v3/order"
 
         time_stamp = int(time.time() * 1000)
         payload = {
             "symbol": self.symbol,
-            "side": 'BUY',
-            "type": 'MARKET',
+            "side": "BUY",
+            "type": "MARKET",
             "quantity": self.lot,
             "recvWindow": 5000,
             "timestamp": time_stamp,
         }
 
         payload_encoded = urlencode(payload)
-        signature = hmac.new(self._secret.encode('utf-8'), payload_encoded.encode('utf-8'), hashlib.sha256).hexdigest()
+        signature = hmac.new(
+            self._secret.encode("utf-8"),
+            payload_encoded.encode("utf-8"),
+            hashlib.sha256,
+        ).hexdigest()
 
-        payload['signature'] = signature
-        order = requests.post(self.url_base + url_order,
-                              params=payload,
-                              headers={"X-MBX-APIKEY": self._key, })
+        payload["signature"] = signature
+        order = requests.post(
+            self.url_base + url_order,
+            params=payload,
+            headers={
+                "X-MBX-APIKEY": self._key,
+            },
+        )
 
         order.raise_for_status()
 
-        self._log.logger.info('Change trade direction to BUY.')
-        self.trade_direction = 'buy'
+        self._log.logger.info("Change trade direction to BUY.")
+        self.trade_direction = "buy"
 
     def open_sell(self):
         """
@@ -190,34 +192,40 @@ class Trade(trade.Trade):
 
         price_last = get_price_last(self.url_base, self.symbol)
 
-        self._log.logger.info(f'SELL Order sent: {self.symbol},'
-                              f' {self.lot} lot(s),'
-                              f' at {price_last}')
+        self._log.logger.info(f"SELL Order sent: {self.symbol}," f" {self.lot} lot(s)," f" at {price_last}")
 
         url_order = "/api/v3/order"
 
         time_stamp = int(time.time() * 1000)
         payload = {
             "symbol": self.symbol,
-            "side": 'SELL',
-            "type": 'MARKET',
+            "side": "SELL",
+            "type": "MARKET",
             "quantity": self.lot,
-            'recvWindow': 5000,
+            "recvWindow": 5000,
             "timestamp": time_stamp,
         }
 
         payload_encoded = urlencode(payload)
-        signature = hmac.new(self._secret.encode('utf-8'), payload_encoded.encode('utf-8'), hashlib.sha256).hexdigest()
+        signature = hmac.new(
+            self._secret.encode("utf-8"),
+            payload_encoded.encode("utf-8"),
+            hashlib.sha256,
+        ).hexdigest()
 
-        payload['signature'] = signature
-        order = requests.post(self.url_base + url_order,
-                              params=payload,
-                              headers={"X-MBX-APIKEY": self._key, })
+        payload["signature"] = signature
+        order = requests.post(
+            self.url_base + url_order,
+            params=payload,
+            headers={
+                "X-MBX-APIKEY": self._key,
+            },
+        )
 
         order.raise_for_status()
 
-        self._log.logger.info('Change trade direction to SELL.')
-        self.trade_direction = 'sell'
+        self._log.logger.info("Change trade direction to SELL.")
+        self.trade_direction = "sell"
 
     def position_open(self, buy: bool, sell: bool) -> str or None:
         """
@@ -275,8 +283,10 @@ class Trade(trade.Trade):
 
         """
 
-        self._log.logger.info(f'Open position called. BUY is {str(buy)}, and SELL is {str(sell)}. Trade allowed is '
-                              f'{self._trade_allowed}.')
+        self._log.logger.info(
+            f"Open position called. BUY is {str(buy)}, and SELL is {str(sell)}. Trade allowed is "
+            f"{self._trade_allowed}."
+        )
 
         if self._trade_allowed and self.trade_direction is None:
             if buy and not sell:
@@ -284,8 +294,9 @@ class Trade(trade.Trade):
                 self.position_check()
 
             if sell and not buy:
-                self._log.warning('A SELL position are not allowed in Binance Spot, you can only sell a symbol'
-                                  ' if you have it.')
+                self._log.warning(
+                    "A SELL position are not allowed in Binance Spot, you can only sell a symbol" " if you have it."
+                )
                 self.position_check()
 
         return self.trade_direction
@@ -334,13 +345,13 @@ class Trade(trade.Trade):
             >>> # Nothing happens, there are no position to be closed.
 
         """
-        self._log.logger.info('Close position called.')
+        self._log.logger.info("Close position called.")
         self.position_check()
-        if self.trade_direction == 'buy':
+        if self.trade_direction == "buy":
             self.open_sell()
             self.position_check()
 
-        elif self.trade_direction == 'sell':
+        elif self.trade_direction == "sell":
             self.open_buy()
             self.position_check()
 
@@ -392,12 +403,12 @@ class Trade(trade.Trade):
             >>> btcusdt_trade.position_close()
 
         """
-        self._log.logger.info('Calls Binance-Spot to check if there is a position opened.')
+        self._log.logger.info("Calls Binance-Spot to check if there is a position opened.")
 
         balance_asset = get_symbol_asset_balance(self._log, self.url_base, self._key, self._secret, self.symbol)
 
         if float(balance_asset) != 0.00000000:
-            self.trade_direction = 'buy'
+            self.trade_direction = "buy"
 
         else:
             self.trade_direction = None

@@ -19,6 +19,7 @@ sphinx-press-theme = "*"
 black = "*"
 pre-commit = "*"
 commitizen = "*"
+pdtj = "*"
 
 [requires]
 python_version = "3.9"

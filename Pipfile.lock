@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f1c150ca745072f93fa0c68d3545483cc7b67d7b30bd02646c4617c57bac30e9"
+            "sha256": "daf05de79778e1610749c218e04026380097426d5b0da1f0540ef8a963eeadb7"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -518,6 +518,14 @@
             "markers": "python_version >= '3.7'",
             "version": "==0.11.1"
         },
+        "pdtj": {
+            "hashes": [
+                "sha256:5996a2893306e8628bebde8f50840fbe1831c16e827d4524c67186f02b532e01",
+                "sha256:f269fa4061f975f7a6d0d9b2b800b65c9049866b42495a364b1957ac6373b306"
+            ],
+            "index": "pypi",
+            "version": "==0.3.0"
+        },
         "platformdirs": {
             "hashes": [
                 "sha256:024996549ee88ec1a9aa99ff7f8fc819bb59e2c3477b410d90a16d32d6e707aa",
@@ -632,7 +640,7 @@
                 "sha256:600d3aefecce26d48d97eee936fdb66e4bc27f934c3ab6dd1e292c4f43946d90",
                 "sha256:fecfcc8cca110fda9d561cb83f1e97ecbb93c613ff857f655818839dac74ce90"
             ],
-            "markers": "python_version < '4.0' and python_full_version >= '3.6.0'",
+            "markers": "python_version < '4' and python_full_version >= '3.6.0'",
             "version": "==1.10.0"
         },
         "requests": {

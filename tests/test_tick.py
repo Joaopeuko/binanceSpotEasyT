@@ -1,13 +1,14 @@
-import requests
 import datetime
 from unittest.mock import patch
+
+import requests
+
 from binanceSpotEasyT.tick import Tick
 
 
 class TestTick:
-
     def test_tick_created_but_not_updated(self):
-        symbol = 'EURUSD'
+        symbol = "EURUSD"
 
         tick = Tick(symbol=symbol)
 
@@ -17,7 +18,7 @@ class TestTick:
         assert tick.last is None
         assert tick.volume is None
 
-    @patch.object(requests, 'get')
+    @patch.object(requests, "get")
     def test_type(self, mock_tick):
         mock_tick.return_value.time = datetime.datetime(year=2022, month=1, day=1)
         mock_tick.return_value.bid = 1.0
@@ -25,7 +26,7 @@ class TestTick:
         mock_tick.return_value.last = 1.0
         mock_tick.return_value.volume = 1.0
 
-        symbol = 'BTCUSDT'
+        symbol = "BTCUSDT"
 
         tick = Tick(symbol=symbol)
 

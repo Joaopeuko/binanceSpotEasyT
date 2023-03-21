@@ -9,13 +9,11 @@ from tests.conftest import MockResponse
 
 class TestRates:
     def test_rates_created_but_not_updated(self):
-        symbol = 'EURUSD'
+        symbol = "EURUSD"
         count = 20
         timeframe = TimeFrame()
 
-        rates = Rates(symbol=symbol,
-                      timeframe=timeframe.ONE_MINUTE,
-                      count=count)
+        rates = Rates(symbol=symbol, timeframe=timeframe.ONE_MINUTE, count=count)
 
         assert rates.time is None
         assert rates.open is None
@@ -24,30 +22,30 @@ class TestRates:
         assert rates.close is None
         assert rates.tick_volume is None
 
-    @patch.object(requests, 'get')
+    @patch.object(requests, "get")
     def test_length(self, mock_requests):
-        json_data = {'Open time': range(20),
-                     'Open': range(20),
-                     'High': range(20),
-                     'Low': range(20),
-                     'Close': range(20),
-                     'Volume': '',
-                     'Close time': '',
-                     'Quote asset volume': '',
-                     'Number of trades': 3,
-                     'Taker buy base asset volume': '',
-                     'Taker buy quote asset volume': '',
-                     'Ignore': ''}
+        json_data = {
+            "Open time": range(20),
+            "Open": range(20),
+            "High": range(20),
+            "Low": range(20),
+            "Close": range(20),
+            "Volume": "",
+            "Close time": "",
+            "Quote asset volume": "",
+            "Number of trades": 3,
+            "Taker buy base asset volume": "",
+            "Taker buy quote asset volume": "",
+            "Ignore": "",
+        }
 
         mock_requests.return_value = MockResponse(json_data, 200)
 
-        symbol = 'BTCUSDT'
+        symbol = "BTCUSDT"
         count = 20
         timeframe = TimeFrame()
 
-        rates = Rates(symbol=symbol,
-                      timeframe=timeframe.ONE_MINUTE,
-                      count=count)
+        rates = Rates(symbol=symbol, timeframe=timeframe.ONE_MINUTE, count=count)
 
         rates.update_rates()
 

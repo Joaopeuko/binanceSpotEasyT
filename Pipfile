@@ -16,6 +16,13 @@ pytest = "*"
 pytest-cov = "*"
 sphinx = "*"
 sphinx-press-theme = "*"
+black = "*"
+pre-commit = "*"
+commitizen = "*"
 
 [requires]
 python_version = "3.9"
+
+
+[scripts]
+format_black = "black ."

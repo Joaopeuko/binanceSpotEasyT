@@ -9,6 +9,14 @@ updates:
         patterns:
           - "*"
 
+  - package-ecosystem: "poetry"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    groups:
+      poetry-dependencies:
+        patterns:
+          - "*" 
 
   - package-ecosystem: 'github-actions'
     directory: '/'

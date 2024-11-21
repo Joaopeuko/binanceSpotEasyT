@@ -9,7 +9,7 @@ python-dotenv = "~=0.19.2"
 abstractEasyT = "~=0.2.2"
 supportLibEasyT = "~=0.1.0"
 numpy = "==2.0.2"
-pandas = "==1.3.5"
+pandas = "==2.2.3"
 
 [dev-packages]
 pytest = "*"

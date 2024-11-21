@@ -520,11 +520,11 @@
         },
         "pdtj": {
             "hashes": [
-                "sha256:5996a2893306e8628bebde8f50840fbe1831c16e827d4524c67186f02b532e01",
-                "sha256:f269fa4061f975f7a6d0d9b2b800b65c9049866b42495a364b1957ac6373b306"
+                "sha256:57a347e3b4dfb5784c6f56b4a0aa5c5c19fcd063f0585325ff466e031a52be9f",
+                "sha256:6994c36f22754b866f8aab045ac4bdc6ee4f7a8c8ce83e19aca4a4d322ef1234"
             ],
             "index": "pypi",
-            "version": "==0.3.0"
+            "version": "==0.3.5"
         },
         "platformdirs": {
             "hashes": [
@@ -632,7 +632,7 @@
                 "sha256:e61ceaab6f49fb8bdfaa0f92c4b57bcfbea54c09277b1b4f7ac376bfb7a7c174",
                 "sha256:f84fbc98b019fef2ee9a1cb3ce93e3187a6df0b2538a651bfb890254ba9f90b5"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==6.0"
         },
         "questionary": {
